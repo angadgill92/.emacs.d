@@ -1,7 +1,8 @@
+
 ** User details
 #+BEGIN_SRC emacs-lisp :results output silent
-(setq user-full-name "Mrinal Purohit"
-      user-mail-address "iammrinal0@gmail.com")
+(setq user-full-name "Angad Gill"
+      user-mail-address "angad.gill@juspay.in")
 #+END_SRC
 ** Mac specific
 *** Beginning of line and end of line
@@ -388,8 +389,7 @@ Use flyspell for =markdown= files
     :bind
     ("C-x g" . magit-status)
     :config
-    (setq magit-commit-arguments (quote ("--gpg-sign=E27C4BC509095144"))
-          magit-diff-use-overlays nil))
+    (setq magit-diff-use-overlays nil))
 #+END_SRC
 
 *** Google-this [[https://github.com/Malabarba/emacs-google-this][GitHub]]
@@ -742,30 +742,6 @@ Displays available keybindings in a popup
                 (company-mode)
                 (turn-on-purescript-indentation))))
 #+END_SRC
-** Python
-#+BEGIN_SRC emacs-lisp :results output silent
-  (use-package elpy
-    :ensure t
-    :defer t
-    :config
-    (setq python-indent-offset 4)
-    (elpy-enable))
-
-  (use-package jedi
-    :ensure t
-    :defer t
-    :init
-    (add-hook 'python-mode-hook 'jedi:setup)
-    (setq jedi:complete-on-dot t
-          jedi:use-shortcuts t))
-
-  (use-package py-autopep8
-    :ensure t
-    :defer t
-    :init
-    (add-hook 'python-mode-hook 'py-autopep8-enable-on-save))
-
-#+END_SRC
 ** Snippets
 #+BEGIN_SRC emacs-lisp :results output silent
   (use-package yasnippet
@@ -794,6 +770,12 @@ Displays available keybindings in a popup
           web-mode-enable-auto-pairing nil
           web-mode-enable-auto-closing t
           web-mode-enable-auto-quoting t))
+#+END_SRC
+** RestClient
+#+BEGIN_SRC emacs-lisp :results output silent
+  (use-package ob-restclient
+    :ensure t
+    :defer t)
 #+END_SRC
 * Documentation
 *** Markdown
@@ -931,44 +913,45 @@ For the fringe on the left with live changes
   ;;   (powerline-default-theme))
 #+END_SRC
 ** Ligatures
-#+BEGIN_SRC emacs-lisp :results output silent
-  (defun my-correct-symbol-bounds (pretty-alist)
-      "Prepend a TAB character to each symbol in this alist,
-  this way compose-region called by prettify-symbols-mode
-  will use the correct width of the symbols
-  instead of the width measured by char-width."
-      (mapcar (lambda (el)
-                (setcdr el (string ?\t (cdr el)))
-                el)
-              pretty-alist))
+# #+BEGIN_SRC emacs-lisp :results output silent
+#   (defun my-correct-symbol-bounds (pretty-alist)
+#       "Prepend a TAB character to each symbol in this alist,
+#   this way compose-region called by prettify-symbols-mode
+#   will use the correct width of the symbols
+#   instead of the width measured by char-width."
+#       (mapcar (lambda (el)
+#                 (setcdr el (string ?\t (cdr el)))
+#                 el)
+#               pretty-alist))
 
-    (defun my-ligature-list (ligatures codepoint-start)
-      "Create an alist of strings to replace with
-  codepoints starting from codepoint-start."
-      (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
-        (-zip-pair ligatures codepoints)))
+#     (defun my-ligature-list (ligatures codepoint-start)
+#       "Create an alist of strings to replace with
+#   codepoints starting from codepoint-start."
+#       (let ((codepoints (-iterate '1+ codepoint-start (length ligatures))))
+#         (-zip-pair ligatures codepoints)))
 
-    (setq my-fira-code-ligatures
-          (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
-                         "{-" "[@#@#$@#@#!@]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
-                         "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
-                         "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
-                         ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
-                         "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
-                         "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
-                         "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
-                         ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
-                         "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
-                         "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
-                         "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-                         "x" ":" "+" "+" "*")))
-            (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
-   ;; nice glyphs for programs with hasklig
-    (defun my-set-ligatures ()
-      "Add hasklig ligatures for use with prettify-symbols-mode."
-      (setq prettify-symbols-alist
-            (append prettify-symbols-alist my-fira-code-ligatures))
-      (prettify-symbols-mode))
+#     (setq my-fira-code-ligatures
+#           (let* ((ligs '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
+#                          "{-" "[@#@#$@#@#!@]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
+#                          "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
+#                          "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
+#                          ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
+#                          "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
+#                          "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
+#                          "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
+#                          ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
+#                          "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
+#                          "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
+#                          "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
+#                          "x" ":" "+" "+" "*")))
+#             (my-correct-symbol-bounds (my-ligature-list ligs #Xe100))))
+#    ;; nice glyphs for programs with hasklig
+#     (defun my-set-ligatures ()
+#       "Add hasklig ligatures for use with prettify-symbols-mode."
+#       (setq prettify-symbols-alist
+#             (append prettify-symbols-alist my-fira-code-ligatures))
+#       (prettify-symbols-mode))
 
-    (add-hook 'purescript-mode-hook 'my-set-ligatures)
-#+END_SRC
+#     (add-hook 'purescript-mode-hook 'my-set-ligatures)
+# #+END_SRC
+
